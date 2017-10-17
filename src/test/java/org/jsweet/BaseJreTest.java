@@ -24,7 +24,7 @@ public abstract class BaseJreTest {
     public void allTests() {
         Map<Method, Exception> failures = new HashMap<>();
         List<Method> good = new ArrayList<>();
-        pickTestMethod(test.Test.class)
+        pickTestMethod(j4ts.test.Test.class)
                 .forEach(m -> {
                     try {
                         m.invoke(null);
@@ -38,7 +38,7 @@ public abstract class BaseJreTest {
             e.getCause().printStackTrace();
         });
         System.err.println("Failed " + failures.size() + " of " + good.size());
-        test.Test.assertTrue(failures.isEmpty());
+        j4ts.test.Test.assertTrue(failures.isEmpty());
     }
 
     private List<Method> pickTestMethod(Class c) {
