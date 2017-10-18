@@ -1,4 +1,4 @@
-package test;
+package j4ts.test;
 
 import static def.dom.Globals.console;
 import static def.dom.Globals.document;

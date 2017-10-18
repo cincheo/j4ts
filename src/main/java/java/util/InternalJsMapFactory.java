@@ -28,7 +28,7 @@ class InternalJsMapFactory {
 	private static final Object jsMapCtor = getJsMapConstructor();
 
 	private static def.js.Object getJsMapConstructor() {
-		return eval("window===undefined?global['Map']:window['Map']");
+		return eval("(function () {var g; if (typeof window === 'undefined') { g = global;}else{ g = window;}  return g['Map'];}())");
 	};
 
 	/*-{
