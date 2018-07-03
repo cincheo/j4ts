@@ -19,27 +19,27 @@ public final class Math {
     }
     
     public static double sin(double arg) {
-        return def.js.Math.sin(arg);
+        return getMathFunction("sin").$apply(object(arg));
     }
 
     public static double cos(double arg) {
-        return def.js.Math.cos(arg);
+        return getMathFunction("cos").$apply(object(arg));
     }
 
     public static double tan(double arg) {
-        return def.js.Math.tan(arg);
+        return getMathFunction("tan").$apply(object(arg));
     }
 
     public static double asin(double arg) {
-        return def.js.Math.asin(arg);
+        return getMathFunction("asin").$apply(object(arg));
     }
 
     public static double acos(double arg) {
-        return def.js.Math.acos(arg);
+        return getMathFunction("acos").$apply(object(arg));
     }
 
     public static double atan(double arg) {
-        return def.js.Math.atan(arg);
+        return getMathFunction("atan").$apply(object(arg));
     }
 
     public static double toRadians(double arg) {
@@ -51,11 +51,11 @@ public final class Math {
     }
 
     public static double exp(double arg) {
-        return def.js.Math.exp(arg);
+        return getMathFunction("exp").$apply(object(arg));
     }
 
     public static double log(double arg) {
-        return def.js.Math.log(arg);
+        return getMathFunction("log").$apply(object(arg));
     }
 
     public static double log10(double arg) {
@@ -63,11 +63,11 @@ public final class Math {
     }
 
     public static double sqrt(double arg) {
-        return def.js.Math.sqrt(arg);
+        return getMathFunction("sqrt").$apply(object(arg));
     }
 
     public static double cbrt(double arg) {
-        return (double) getMathFunction("cbrt").$apply(object(arg));
+        return getMathFunction("cbrt").$apply(object(arg));
     }
 
     public static double IEEEremainder(double dividend, double divisor) {
@@ -75,20 +75,20 @@ public final class Math {
     }
 
     public static double ceil(double arg) {
-        return def.js.Math.ceil(arg);
+        return getMathFunction("ceil").$apply(object(arg));
     }
 
     public static double floor(double arg) {
-        return def.js.Math.floor(arg);
+        return getMathFunction("floor").$apply(object(arg));
     }
 
 
     public static double atan2(double arg, double arg2) {
-        return def.js.Math.atan2(arg, arg2);
+        return getMathFunction("atan2").$apply(object(arg), object(arg2));
     }
 
     public static double pow(double arg, double arg2) {
-        return def.js.Math.pow(arg, arg2);
+        return getMathFunction("pow").$apply(object(arg), object(arg2));
     }
 
     public static int round(float arg) {
@@ -312,27 +312,27 @@ public final class Math {
     }
 
     public static double sinh(double arg) {
-        return (double) getMathFunction("sinh").$apply(object(arg));
+        return getMathFunction("sinh").$apply(object(arg));
     }
 
     public static double cosh(double arg) {
-        return (double) getMathFunction("cosh").$apply(object(arg));
+        return getMathFunction("cosh").$apply(object(arg));
     }
 
     public static double tanh(double arg) {
-        return (double) getMathFunction("tanh").$apply(object(arg));
+        return getMathFunction("tanh").$apply(object(arg));
     }
 
     public static double hypot(double arg, double arg2) {
-        return (double) getMathFunction("hypot").$apply(object(arg), object(arg2));
+        return getMathFunction("hypot").$apply(object(arg), object(arg2));
     }
 
     public static double expm1(double arg) {
-        return (double) getMathFunction("expm1").$apply(object(arg));
+        return getMathFunction("expm1").$apply(object(arg));
     }
 
     public static double log1p(double arg) {
-        return (double) getMathFunction("log1p").$apply(object(arg));
+        return getMathFunction("log1p").$apply(object(arg));
     }
 
     public static double copySign(double arg, double arg2) {
