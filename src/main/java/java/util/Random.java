@@ -245,7 +245,7 @@ public class Random {
    * @return a random {@code int}.
    */
   public int nextInt(int n) {
-    checkCriticalArgument(n > 0);
+    checkCriticalArgument(n > 0, "Random nextInt parameter can only be positive: %s", Integer.toString(n));
 
     if ((n & -n) == n) {
       return (int) ((n * nextInternal(31)) * twoToTheMinus31);

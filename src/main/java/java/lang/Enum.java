@@ -30,7 +30,8 @@ public abstract class Enum<E extends Enum<E>> implements Comparable<E>, Serializ
 
 	public static <T extends Enum<T>> T valueOf(Class<T> enumType, String name) {
 		def.js.Function enumValueOfFunc = checkNotNull(enumType).enumValueOfFunc;
-		checkCriticalArgument(enumValueOfFunc != null);
+		checkCriticalArgument(enumValueOfFunc != null, "EnumValueOfFunc is null at enum class: %s, enum value name: %s",
+				enumType.getName(), name);
 		checkNotNull(name);
 		return invokeValueOf(enumValueOfFunc, name);
 	}

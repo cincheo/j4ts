@@ -336,7 +336,8 @@ public final class CharacterHelper implements Comparable<CharacterHelper>, Seria
 	}
 
 	public static char[] toChars(int codePoint) {
-		checkCriticalArgument(codePoint >= 0 && codePoint <= MAX_CODE_POINT);
+		checkCriticalArgument(codePoint >= 0 && codePoint <= MAX_CODE_POINT, "CodePoint %s not in range [%s, %s]",
+				Integer.toString(codePoint), "0", Integer.toString(MAX_CODE_POINT));
 
 		if (codePoint >= MIN_SUPPLEMENTARY_CODE_POINT) {
 			return new char[] { getHighSurrogate(codePoint), getLowSurrogate(codePoint), };
@@ -346,7 +347,8 @@ public final class CharacterHelper implements Comparable<CharacterHelper>, Seria
 	}
 
 	public static int toChars(int codePoint, char[] dst, int dstIndex) {
-		checkCriticalArgument(codePoint >= 0 && codePoint <= MAX_CODE_POINT);
+		checkCriticalArgument(codePoint >= 0 && codePoint <= MAX_CODE_POINT, "CodePoint %s not in range [%s, %s]",
+				Integer.toString(codePoint), "0", Integer.toString(MAX_CODE_POINT));
 
 		if (codePoint >= MIN_SUPPLEMENTARY_CODE_POINT) {
 			dst[dstIndex++] = getHighSurrogate(codePoint);
