@@ -67,7 +67,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>,
   public ArrayList(Collection<? extends E> c) {
 	  array = (E[]) new Object[0];
     // Avoid calling overridable methods from constructors
-    ArrayHelper.insertTo(array, 0, c.toArray());
+    ArrayHelper.insertToArr(array, 0, c.toArray());
   }
 
   public ArrayList(int initialCapacity) {
@@ -95,7 +95,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>,
     if (len == 0) {
       return false;
     }
-    ArrayHelper.insertTo(array, array.length, cArray);
+    ArrayHelper.insertToArr(array, array.length, cArray);
     return true;
   }
 
@@ -107,7 +107,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>,
     if (len == 0) {
       return false;
     }
-    ArrayHelper.insertTo(array, index, cArray);
+    ArrayHelper.insertToArr(array, index, cArray);
     return true;
   }
 

@@ -73,6 +73,10 @@ public class ArrayHelper {
 		copy(values, 0, array, index, values.length, false);
 	}
 
+	public static void insertToArr(Object array, int index, Object[] values) {
+		copy(values, 0, array, index, values.length, false);
+	}
+
 	public static void copy(Object array, int srcOfs, Object dest, int destOfs, int len) {
 		copy(array, srcOfs, dest, destOfs, len, true);
 	}
@@ -100,5 +104,5 @@ public class ArrayHelper {
 
 	private static void applySplice(Object arrayObject, int index, int deleteCount, Object arrayToAdd) {
 		$insert("Array.prototype.splice.apply(arrayObject, [index, deleteCount].concat(arrayToAdd))");
-	};
+	}
 }
