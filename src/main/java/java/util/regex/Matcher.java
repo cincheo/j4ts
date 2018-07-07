@@ -60,13 +60,8 @@ public class Matcher implements MatchResult {
             for (int i = 0; i < args.length-3; ++i) {
                 int pl = parenthesisStart[i];
 
-                int countOut = 0;
                 while (parenthesisEnd[countEndsFrom] < pl) {
                     countEndsFrom += 1;
-                    countOut += 1;
-                }
-
-                for(int k = 0; k < countOut; ++k) {
                     lastIndices.pop();
                 }
 
