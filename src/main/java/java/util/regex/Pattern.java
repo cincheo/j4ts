@@ -34,21 +34,45 @@ public class Pattern implements Serializable {
 
     private static class GroupNameRemover implements Function<def.js.String[], def.js.String> {
         private final Map<String, Integer> namedGroupsNames;
-        int count = 0;
+        private int count = 0;
+        private boolean inBrackets = false;
 
         private GroupNameRemover(Map<String, Integer> namedGroupsNames) {
             this.namedGroupsNames = namedGroupsNames;
         }
 
+
         @Override
         public def.js.String apply(def.js.String[] args) {
-            if (args[2] != undefined) {
-                namedGroupsNames.put(string(args[2]), count);
+            // argument list:
+            // 0 == whole recognized text
+            // 1 == open bracket escapes
+            // 2 == close bracket escapes
+            // 3 == open parenthesis escapes
+            // 4 == non capturing block
+            // 5 == named group name
+
+            if (inBrackets || args[2] != undefined) { // only close bracket saves out from this state
+                inBrackets = args[2] == undefined || args[2].length == 1; // keep in brackets if not close or escaped
+                return args[0];
             }
-            if (args[1] == undefined) {
+            if (args[1] != undefined) {
+                inBrackets = args[1].length == 0; // open bracket without escape
+                return args[0];
+            }
+            if (args[3] != undefined && args[3].length != 0) { // escaped open parenthesis, not a block
+                return args[0];
+            }
+
+            if (args[4] == undefined) { // not a non capturing block (aka capturing block), count it
                 count += 1;
             }
-            return args[0].replace(new RegExp("\\?<[^>]+>"), "");
+
+            if (args[5] != undefined) { // capturing block with name
+                namedGroupsNames.put(string(args[5]), count);
+                args[0] = args[0].replace(new RegExp("\\?<[^>]+>"), "");
+            }
+            return args[0];
         }
     }
 
@@ -72,16 +96,62 @@ public class Pattern implements Serializable {
         }
 
         // formatting regexp to acquire some information (name and indices)
-        // this should not be to change anything (expect regExps with: "[( (]", or "[) (]" - TODO)
+        // this should not be to change anything about the original regex
         Map<String, Integer> namedGroupsNames = new HashMap<>();
         GroupNameRemover groupNameRemover = new GroupNameRemover(namedGroupsNames);
 
         regexpString = string(string(regexpString)
-                .replace(new RegExp("(?:[^\\\\]\\(|^\\()(?:(\\?\\:)|\\?<([^)>]*)>)?", "g"),
+                .replace(new RegExp("" +
+                                "(?:\\\\\\\\)*(\\\\?)\\[\\^?\\]?|" +
+                                "(?:\\\\\\\\)*(\\\\?)\\]|" +
+                                "(?:\\\\\\\\)*(\\\\?)\\((?:" +
+                                    "(\\?\\:)|" +
+                                    "\\?<([^>]+)>)?", "g"),
                         Lang.<Supplier<def.js.String>> any((Function<def.js.String[], def.js.String>)
                                 ((def.js.String ... args) -> groupNameRemover.apply(args))))
                 // add non-capturing groups to all string
-                .replace(new RegExp("(^|\\(|\\)(?:\\+|\\?|\\{[^}]+\\})?)([^+{}?()][^()]*)(\\(|$)", "g"), "$1(?:$2)$3"));
+                .replace(new RegExp("" +
+                        "(" + // previous group suffix ($1)
+                            "\\?\\:|" + // open bracket modifier (?:
+                            "(?:" + // close bracket modifiers
+                                "[*+?]|" + // * + ?
+                                "\\{[^\\}]+\\}" + // {3, 4}
+                            ")*" +
+                        ")" +
+                        "((?:" + // main grouped characters ($2)
+                            "[^()\\\\|\\[\\]]|" + // any not special character
+                            "\\\\\\\\|" + // escaped characters
+                            "\\\\\\(|" +
+                            "\\\\\\)|" +
+                            "\\\\\\||" +
+                            "\\\\\\[|" +
+                            "\\\\\\]|" +
+                            "\\[\\^?\\]\\]|" + // []] and [^]] special brackets
+                            "\\[\\^?(?:" + // brackets
+                                "[^\\\\\\]]|" + // not special closing character
+                                "\\\\\\\\|" + // escaped escape
+                                "\\\\\\]" + // escaped close bracket
+                            ")+\\]" +
+                        ")*)", "g"), Lang.<Supplier<def.js.String>> any((Function<def.js.String[], def.js.String>)
+                        ((def.js.String ... args) -> {
+                            if (args[2] == undefined || args[2].length == 0) {
+                                return args[1];
+                            }
+
+                            def.js.String regexp = args[args.length - 1];
+                            int startIndexOfMatched = Integer.parseInt(string(args[args.length - 2]));
+                            int endIndexOfMatched = startIndexOfMatched + args[0].length;
+                            boolean hasOpenBracket = (startIndexOfMatched > 0 && "(".equals(string(regexp.charAt(startIndexOfMatched-1)))) ||
+                                    (startIndexOfMatched > 2 && "(?:".equals(string(regexp.substr(startIndexOfMatched - 3, 3))));
+                            boolean hasCloseBracket = regexp.length > endIndexOfMatched && ")".equals(string(regexp.charAt(endIndexOfMatched)));
+
+                            if (hasOpenBracket && hasCloseBracket) {
+                                return string(string(args[1]) + args[2]);
+                            }
+
+                            return string(args[1] + "(?:" + args[2] + ")");
+                        })))
+        );
 
         try {
             return new Pattern(new RegExp(regexpString, jsFlags), flags, namedGroupsNames);
