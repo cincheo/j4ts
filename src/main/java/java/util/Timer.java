@@ -98,17 +98,17 @@ public class Timer {
                 @Override
                 public void run() {
                     if (task.state != TimerTask.CANCELLED) {
-                        task.nextExecutionTime = System.currentTimeMillis() + period;
+                        task.nextExecutionTime = System.currentTimeMillis() + task.period;
 
                         task.handle = (int) window.setInterval(function(() -> {
                             if (task.state != TimerTask.CANCELLED) {
-                                task.nextExecutionTime = System.currentTimeMillis() + period;
+                                task.nextExecutionTime = System.currentTimeMillis() + task.period;
                                 task.run();
                             } else {
                                 clearInterval(task.handle);
                                 intervals.splice(intervals.indexOf(task), 1);
                             }
-                        }), period);
+                        }), task.period);
                         intervals.push(task);
 
                         task.run(); // first run
