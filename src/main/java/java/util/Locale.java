@@ -37,6 +37,12 @@ public class Locale {
 			return "en";
 		}
 	}
+	static class FrenchLocale extends Locale {
+		@Override
+		public String toString() {
+			return "fr";
+		}
+	}
 
 	static class USLocale extends Locale {
 		@Override
@@ -45,10 +51,19 @@ public class Locale {
 		}
 	}
 
+	static class UKLocale extends Locale {
+		@Override
+		public String toString() {
+			return "en-gb";
+		}
+	}
+
+
+
 	static class DefaultLocale extends Locale {
 		@Override
 		public String toString() {
-			return "unknown";
+			return "fr";
 		}
 	}
 
@@ -57,6 +72,10 @@ public class Locale {
 	public static final Locale ENGLISH = new EnglishLocale();
 
 	public static final Locale US = new USLocale();
+
+	public static final Locale FRANCE = new FrenchLocale();
+
+	public static final Locale UK = new UKLocale();
 
 	private static Locale defaultLocale = new DefaultLocale();
 
